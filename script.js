@@ -1,4 +1,4 @@
-let currentValue = '0';
+﻿let currentValue = '0';
 let previousValue = null;
 let operator = null;
 
@@ -20,8 +20,10 @@ function appendNumber(num) {
 }
 
 function setOperator(op) {
-    if (op !== '+') {
-        // Only addition is allowed
+    const normalizedOperator = op === '\u00D7' || op === 'x' || op === 'X' ? '*' : op;
+    
+    if (normalizedOperator !== '+' && normalizedOperator !== '*') {
+        // Only addition and multiplication are allowed
         return;
     }
     
@@ -30,7 +32,7 @@ function setOperator(op) {
     }
     
     previousValue = parseFloat(currentValue);
-    operator = op;
+    operator = normalizedOperator;
     currentValue = '0';
 }
 
@@ -42,9 +44,14 @@ function calculate() {
     const current = parseFloat(currentValue);
     let result;
     
-    // Only addition is implemented
     if (operator === '+') {
         result = previousValue + current;
+    } else if (operator === '*') {
+        result = previousValue * current;
+    }
+    
+    if (result === undefined) {
+        return;
     }
     
     currentValue = result.toString();
