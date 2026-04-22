@@ -20,7 +20,7 @@ function appendNumber(num) {
 }
 
 function setOperator(op) {
-    const normalizedOperator = op === '\u00D7' || op === 'x' || op === 'X' ? '*' : op;
+    const normalizedOperator = op === '\u00D7' || op === '\u2715' || op === 'x' || op === 'X' ? '*' : op;
 
     if (normalizedOperator !== '+' && normalizedOperator !== '-' && normalizedOperator !== '*') {
         // Only addition, subtraction, and multiplication are allowed
@@ -42,17 +42,17 @@ function calculate() {
     }
 
     const current = parseFloat(currentValue);
-    let result;
+    const operations = {
+        '+': (a, b) => a + b,
+        '-': (a, b) => a - b,
+        '*': (a, b) => a * b
+    };
 
-    if (operator === '+') {
-        result = previousValue + current;
-    } else if (operator === '-') {
-        result = previousValue - current;
-    } else if (operator === '*') {
-        result = previousValue * current;
-    } else {
+    const operation = operations[operator];
+    if (!operation) {
         return;
     }
+    const result = operation(previousValue, current);
 
     currentValue = result.toString();
     operator = null;
