@@ -21,16 +21,16 @@ function appendNumber(num) {
 
 function setOperator(op) {
     const normalizedOperator = op === '\u00D7' || op === 'x' || op === 'X' ? '*' : op;
-    
-    if (normalizedOperator !== '+' && normalizedOperator !== '*') {
-        // Only addition and multiplication are allowed
+
+    if (normalizedOperator !== '+' && normalizedOperator !== '-' && normalizedOperator !== '*') {
+        // Only addition, subtraction, and multiplication are allowed
         return;
     }
-    
+
     if (previousValue !== null && operator !== null) {
         calculate();
     }
-    
+
     previousValue = parseFloat(currentValue);
     operator = normalizedOperator;
     currentValue = '0';
@@ -40,20 +40,20 @@ function calculate() {
     if (operator === null || previousValue === null) {
         return;
     }
-    
+
     const current = parseFloat(currentValue);
     let result;
-    
+
     if (operator === '+') {
         result = previousValue + current;
+    } else if (operator === '-') {
+        result = previousValue - current;
     } else if (operator === '*') {
         result = previousValue * current;
-    }
-    
-    if (result === undefined) {
+    } else {
         return;
     }
-    
+
     currentValue = result.toString();
     operator = null;
     previousValue = null;
