@@ -1,4 +1,4 @@
-let currentValue = '0';
+﻿let currentValue = '0';
 let previousValue = null;
 let operator = null;
 
@@ -20,17 +20,19 @@ function appendNumber(num) {
 }
 
 function setOperator(op) {
-    if (op !== '+' && op !== '-') {
-        // Only addition and subtraction are allowed
+    const normalizedOperator = op === '\u00D7' || op === 'x' || op === 'X' ? '*' : op;
+
+    if (normalizedOperator !== '+' && normalizedOperator !== '-' && normalizedOperator !== '*') {
+        // Only addition, subtraction, and multiplication are allowed
         return;
     }
-    
+
     if (previousValue !== null && operator !== null) {
         calculate();
     }
-    
+
     previousValue = parseFloat(currentValue);
-    operator = op;
+    operator = normalizedOperator;
     currentValue = '0';
 }
 
@@ -38,19 +40,20 @@ function calculate() {
     if (operator === null || previousValue === null) {
         return;
     }
-    
+
     const current = parseFloat(currentValue);
     let result;
-    
-    // Addition and subtraction are implemented
+
     if (operator === '+') {
         result = previousValue + current;
     } else if (operator === '-') {
         result = previousValue - current;
+    } else if (operator === '*') {
+        result = previousValue * current;
     } else {
         return;
     }
-    
+
     currentValue = result.toString();
     operator = null;
     previousValue = null;
