@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub Actions CI/CD"
+  short_description: "Secure CI/CD workflows and deployment guardrails."
+  default_prompt: "Use $github-actions-cicd to design or improve a secure GitHub Actions CI/CD pipeline with quality gates and safe deployments."
