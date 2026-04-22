@@ -20,8 +20,8 @@ function appendNumber(num) {
 }
 
 function setOperator(op) {
-    if (op !== '+') {
-        // Only addition is allowed
+    if (op !== '+' && op !== '-') {
+        // Only addition and subtraction are allowed
         return;
     }
     
@@ -42,9 +42,13 @@ function calculate() {
     const current = parseFloat(currentValue);
     let result;
     
-    // Only addition is implemented
+    // Addition and subtraction are implemented
     if (operator === '+') {
         result = previousValue + current;
+    } else if (operator === '-') {
+        result = previousValue - current;
+    } else {
+        return;
     }
     
     currentValue = result.toString();
