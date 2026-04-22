@@ -9,6 +9,10 @@ function updateDisplay() {
 }
 
 function appendNumber(num) {
+    if (currentValue === 'Error') {
+        currentValue = '0';
+    }
+
     if (currentValue === '0' && num !== '.') {
         currentValue = num;
     } else if (num === '.' && currentValue.includes('.')) {
@@ -22,8 +26,8 @@ function appendNumber(num) {
 function setOperator(op) {
     const normalizedOperator = op === '\u00D7' || op === 'x' || op === 'X' ? '*' : op;
 
-    if (normalizedOperator !== '+' && normalizedOperator !== '-' && normalizedOperator !== '*') {
-        // Only addition, subtraction, and multiplication are allowed
+    if (normalizedOperator !== '+' && normalizedOperator !== '-' && normalizedOperator !== '*' && normalizedOperator !== '/') {
+        // Only basic arithmetic operators are allowed
         return;
     }
 
@@ -32,6 +36,14 @@ function setOperator(op) {
     }
 
     previousValue = parseFloat(currentValue);
+    if (Number.isNaN(previousValue)) {
+        previousValue = null;
+        operator = null;
+        currentValue = '0';
+        updateDisplay();
+        return;
+    }
+
     operator = normalizedOperator;
     currentValue = '0';
 }
@@ -42,6 +54,9 @@ function calculate() {
     }
 
     const current = parseFloat(currentValue);
+    if (Number.isNaN(current)) {
+        return;
+    }
     let result;
 
     if (operator === '+') {
@@ -50,6 +65,15 @@ function calculate() {
         result = previousValue - current;
     } else if (operator === '*') {
         result = previousValue * current;
+    } else if (operator === '/') {
+        if (current === 0) {
+            currentValue = 'Error';
+            operator = null;
+            previousValue = null;
+            updateDisplay();
+            return;
+        }
+        result = previousValue / current;
     } else {
         return;
     }
